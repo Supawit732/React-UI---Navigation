@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AppHeader } from './components';
-import { stores } from './data';
+import { stores } from './products';
 import { colors, sharedStyles } from './theme';
 import { ScreenProps } from './types';
 

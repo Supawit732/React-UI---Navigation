@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AppHeader } from './components';
-import { categories, products } from './data';
+import { categories, products } from './products';
 import { colors, sharedStyles } from './theme';
 import { ScreenProps } from './types';
 
@@ -38,10 +38,10 @@ export default function CategoryDetailScreen({ navigate, goBack, params }: Scree
               style={styles.productCard}
               onPress={() => navigate('productDetail', { productId: product.id })}
             >
-              <Image source={{ uri: product.imageUrl }} style={styles.image} />
+              <Image source={{ uri: product.image_url }} style={styles.image} />
               <View style={styles.info}>
                 <Text style={styles.name}>{product.name}</Text>
-                <Text style={sharedStyles.mutedText}>Stock: {product.stock}</Text>
+                <Text style={sharedStyles.mutedText}>{product.stock_text}</Text>
                 <Text style={sharedStyles.mutedText}>${product.price?.toFixed(2)}</Text>
               </View>
               <Text style={styles.chevron}>{'>'}</Text>

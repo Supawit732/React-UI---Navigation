@@ -10,7 +10,7 @@ This repo is a **React Native + Expo (~57)** inventory app for an Internet Progr
 - Screens: `*Screen.tsx` — register in `types.ts` (`ScreenName`) and `App.tsx`.
 - Shared UI in `components.tsx`: `AppHeader` (top), `BottomNav` + `NavIcon` (bottom), `MenuIconBadge` (Menu page), `AppLogo`.
 - Theme: `theme.ts` — Teal `#0F766E` + Slate.
-- Mock data: `data.ts` (save to disk — unsaved editor buffer will not update Metro).
+- Mock data: `products.ts` + `products.json` (product fields use snake_case: `stock_text`, `location_text`, `badge_status`, `image_url`). Save to disk — unsaved editor buffer will not update Metro.
 - Search is **inline** on `ProductsScreen.tsx` — no separate Search screen.
 - Settings profile: **Supawit Leelachayakul** / `supawit.le@ku.th` / `+66959190515` / initials **SL**.
 

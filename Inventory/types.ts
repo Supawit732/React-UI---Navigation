@@ -16,10 +16,12 @@ export type Product = {
   id: string;
   name: string;
   stock: number;
+  stock_text: string;
   category: string;
-  location: string;
-  status: string;
-  imageUrl: string;
+  location_count: number;
+  location_text: string;
+  badge_status: string;
+  image_url: string;
   price?: number;
   description?: string;
 };

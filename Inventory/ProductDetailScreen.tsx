@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { AppHeader } from './components';
-import { products, stores } from './data';
+import { products, stores } from './products';
 import { colors, sharedStyles } from './theme';
 import { ScreenProps } from './types';
 
@@ -12,16 +12,16 @@ export default function ProductDetailScreen({ navigate, goBack, params }: Screen
     <View style={sharedStyles.container}>
       <AppHeader title="Product details" onBack={goBack} onProfile={() => navigate('settings')} />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <Image source={{ uri: product.imageUrl }} style={styles.image} />
+        <Image source={{ uri: product.image_url }} style={styles.image} />
         <Text style={styles.name}>{product.name}</Text>
         <View style={sharedStyles.statusBadge}>
-          <Text style={sharedStyles.statusText}>{product.status}</Text>
+          <Text style={sharedStyles.statusText}>{product.badge_status}</Text>
         </View>
 
         <View style={[sharedStyles.card, styles.metaCard]}>
-          <MetaRow label="Stock" value={String(product.stock)} />
+          <MetaRow label="Stock" value={product.stock_text} />
           <MetaRow label="Category" value={product.category} />
-          <MetaRow label="Location" value={product.location} />
+          <MetaRow label="Location" value={product.location_text} />
           <MetaRow label="Price" value={`$${product.price?.toFixed(2) ?? '—'}`} />
         </View>
 

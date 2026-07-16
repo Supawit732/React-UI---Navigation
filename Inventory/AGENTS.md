@@ -21,7 +21,8 @@ Inventory/
 ├── App.tsx                 # Router + ScreenTransition (Animated fade/slide)
 ├── index.ts
 ├── types.ts
-├── data.ts
+├── products.ts             # exports from products.json
+├── products.json
 ├── theme.ts                # Teal + Slate
 ├── components.tsx          # AppHeader, BottomNav, NavIcon, MenuIconBadge, AppLogo
 ├── LoginScreen.tsx
@@ -109,9 +110,13 @@ Do **not** use emoji icons. Prefer `NavIcon` View shapes.
 
 Inline on `ProductsScreen.tsx` only — no `SearchScreen` / `'search'` route.
 
-## Data (`data.ts`)
+## Data (`products.ts` / `products.json`)
 
-Mock products (some custom image URLs: AIS iPhone, Titan S25, Ultra 2, iStudio MX Master), categories, stores.
+- Source of truth: `products.json`
+- Product fields: `id`, `name`, `stock`, `stock_text`, `category`, `location_count`, `location_text`, `badge_status`, `image_url` (+ optional `price`, `description`)
+- Also: `categories`, `stores`, `recentActivity`, `topCategories`
+- `products.ts` re-exports typed arrays from the JSON
+- Save JSON to disk before expecting Metro to pick up changes
 
 ## Settings profile
 
@@ -126,7 +131,7 @@ Mock products (some custom image URLs: AIS iPhone, Titan S25, Ultra 2, iStudio M
 - `StyleSheet` + `theme.ts`
 - `ScreenProps`: `navigate`, `goBack`, `logout`, `params`
 - Prefer existing patterns; no React Navigation unless asked
-- Save files to disk before expecting Metro to pick up `data.ts` URL changes
+- Save files to disk before expecting Metro to pick up `products.json` URL changes
 
 ## Run
 
