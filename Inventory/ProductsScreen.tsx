@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
@@ -13,47 +12,17 @@ import { AppHeader, BottomNav } from './components';
 import { colors, sharedStyles } from './theme';
 import { Product, ScreenProps } from './types';
 
-/** GitHub Raw — path includes Inventory/ because repo root is the parent folder */
-const PRODUCTS_RAW_URL =
-  'https://raw.githubusercontent.com/Supawit732/React-UI---Navigation/main/Inventory/products.json';
-
 export default function ProductsScreen({ navigate }: ScreenProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function loadProducts() {
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await fetch(PRODUCTS_RAW_URL);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-        const data: Product[] = await response.json();
-        if (!cancelled) {
-          setProducts(Array.isArray(data) ? data : []);
-        }
-      } catch (e) {
-        if (!cancelled) {
-          setProducts([]);
-          setError(e instanceof Error ? e.message : 'Failed to load products');
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    }
-
-    loadProducts();
-    return () => {
-      cancelled = true;
-    };
+    fetch(
+      'https://raw.githubusercontent.com/Supawit732/React-UI---Navigation/refs/heads/main/Inventory/products.json'
+    )
+      .then((res) => res.json())
+      .then((data: Product[]) => setProducts(data))
+      .catch(console.error);
   }, []);
 
   const filtered = products.filter((p) =>
@@ -90,72 +59,60 @@ export default function ProductsScreen({ navigate }: ScreenProps) {
         </TouchableOpacity>
       </View>
 
-      {loading ? (
-        <View style={styles.center}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={styles.hint}>Loading products from GitHub...</Text>
-        </View>
-      ) : error ? (
-        <View style={styles.center}>
-          <Text style={styles.errorText}>Could not load products</Text>
-          <Text style={styles.hint}>{error}</Text>
-        </View>
-      ) : (
-        <FlatList
-          style={styles.list}
-          contentContainerStyle={styles.listContent}
-          data={filtered}
-          keyExtractor={(item) => item.id}
-          keyboardShouldPersistTaps="handled"
-          ListEmptyComponent={
-            <Text style={styles.emptyText}>No products found</Text>
-          }
-          renderItem={({ item: product }) => {
-            const isLow = product.badge_status === 'Low in stock';
-            return (
-              <TouchableOpacity
-                style={styles.productCard}
-                onPress={() =>
-                  navigate('productDetail', { productId: product.id })
-                }
-              >
-                <Image
-                  source={{ uri: product.image_url }}
-                  style={styles.productImage}
-                />
-                <View style={styles.productInfo}>
-                  <Text style={styles.productName}>{product.name}</Text>
-                  <Text style={sharedStyles.mutedText}>{product.stock_text}</Text>
-                  <Text style={sharedStyles.mutedText}>
-                    Category: {product.category}
-                  </Text>
-                  <Text style={sharedStyles.mutedText}>
-                    Location: {product.location_text}
-                  </Text>
-                  <View style={styles.cardFooter}>
-                    <View
+      <FlatList
+        style={styles.list}
+        contentContainerStyle={styles.listContent}
+        data={filtered}
+        keyExtractor={(item) => item.id}
+        keyboardShouldPersistTaps="handled"
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>No products found</Text>
+        }
+        renderItem={({ item: product }) => {
+          const isLow = product.badge_status === 'Low in stock';
+          return (
+            <TouchableOpacity
+              style={styles.productCard}
+              onPress={() =>
+                navigate('productDetail', { productId: product.id })
+              }
+            >
+              <Image
+                source={{ uri: product.image_url }}
+                style={styles.productImage}
+              />
+              <View style={styles.productInfo}>
+                <Text style={styles.productName}>{product.name}</Text>
+                <Text style={sharedStyles.mutedText}>{product.stock_text}</Text>
+                <Text style={sharedStyles.mutedText}>
+                  Category: {product.category}
+                </Text>
+                <Text style={sharedStyles.mutedText}>
+                  Location: {product.location_text}
+                </Text>
+                <View style={styles.cardFooter}>
+                  <View
+                    style={[
+                      sharedStyles.statusBadge,
+                      isLow && styles.lowBadge,
+                    ]}
+                  >
+                    <Text
                       style={[
-                        sharedStyles.statusBadge,
-                        isLow && styles.lowBadge,
+                        sharedStyles.statusText,
+                        isLow && styles.lowBadgeText,
                       ]}
                     >
-                      <Text
-                        style={[
-                          sharedStyles.statusText,
-                          isLow && styles.lowBadgeText,
-                        ]}
-                      >
-                        {product.badge_status}
-                      </Text>
-                    </View>
-                    <Text style={styles.moreButton}>{'>'}</Text>
+                      {product.badge_status}
+                    </Text>
                   </View>
+                  <Text style={styles.moreButton}>{'>'}</Text>
                 </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
-      )}
+              </View>
+            </TouchableOpacity>
+          );
+        }}
+      />
 
       <BottomNav active="products" navigate={navigate} />
     </View>
@@ -188,23 +145,6 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 24,
     flexGrow: 1,
-  },
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-  },
-  hint: {
-    marginTop: 10,
-    fontSize: 13,
-    color: colors.muted,
-    textAlign: 'center',
-  },
-  errorText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.danger,
   },
   emptyText: {
     textAlign: 'center',
